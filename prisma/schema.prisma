@@ -13,20 +13,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Post {
-  id        String   @id @default(cuid())
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+/**
+ * ابزارهای ویژه‌ای که از پنل مدیریت (/admin) اضافه می‌شوند.
+ * این ابزارها در «تب ویژه» صفحه /tools و بخش ویژه صفحه اصلی نمایش داده می‌شوند.
+ */
+model SpecialTool {
+  id          String   @id @default(cuid())
+  title       String
+  excerpt     String
+  description String   @default("")
+  url         String
+  emoji       String   @default("✨")
+  /** یکی از کلیدهای CategoryColor: blue|orange|amber|teal|purple|cyan|green|pink|slate */
+  color       String   @default("pink")
+  /** برچسب نمایشی روی کارت، مثل «ویژه» یا «هوش مصنوعی» */
+  badge       String   @default("ویژه")
+  sortOrder   Int      @default(0)
+  visible     Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

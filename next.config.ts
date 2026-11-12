@@ -23,7 +23,8 @@ const nextConfig: NextConfig = {
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           {
             key: "Permissions-Policy",
-            value: "camera=(), microphone=(), geolocation=()",
+            // دوربین فقط برای ابزار «خواندن QR Code» لازم است؛ میکروفون و موقعیت مکانی بسته می‌مانند.
+            value: "camera=(self), microphone=(), geolocation=()",
           },
         ],
       },
