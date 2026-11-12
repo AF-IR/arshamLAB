@@ -26,7 +26,7 @@ export function SiteFooter() {
       <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-10 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <span className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-teal-500 via-teal-600 to-cyan-600 text-white">
               <FlaskConical className="size-4.5" aria-hidden="true" />
             </span>
             <span className="text-base font-extrabold" dir="ltr">

@@ -14,7 +14,7 @@ export function SiteHeader() {
           className="flex shrink-0 items-center gap-2.5 rounded-lg focus-visible:outline-2 focus-visible:outline-ring"
           aria-label={`${SITE_NAME} — ${SITE_TAGLINE}`}
         >
-          <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
+          <span className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 via-teal-600 to-cyan-600 text-white shadow-sm transition-transform hover:scale-105">
             <FlaskConical className="size-5" aria-hidden="true" />
           </span>
           <span className="leading-tight">

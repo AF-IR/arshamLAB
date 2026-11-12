@@ -54,6 +54,11 @@ export function MobileMenu() {
               </Link>
             </li>
             <li>
+              <Link href="/tools?filter=special" onClick={() => setOpen(false)} className="block rounded-lg px-3 py-2.5 font-medium hover:bg-accent">
+                تب ویژه ⭐
+              </Link>
+            </li>
+            <li>
               <Link href="/tools?filter=popular" onClick={() => setOpen(false)} className="block rounded-lg px-3 py-2.5 font-medium hover:bg-accent">
                 ابزارهای محبوب
               </Link>

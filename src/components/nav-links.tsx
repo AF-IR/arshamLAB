@@ -1,24 +1,37 @@
 "use client";
 
+import { Suspense } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-const LINKS = [
-  { href: "/", label: "خانه" },
-  { href: "/tools", label: "دسته‌بندی ابزارها" },
-  { href: "/tools?filter=popular", label: "ابزارهای محبوب", match: "/tools" },
-  { href: "/about", label: "درباره ما" },
+interface NavLinkItem {
+  href: string;
+  label: string;
+  /** مسیر پایه برای تشخیص صفحه فعال */
+  basePath: string;
+  /** مقدار پارامتر filter که باید برای فعال بودن لینک برابر باشد */
+  filter?: string;
+}
+
+const LINKS: NavLinkItem[] = [
+  { href: "/", label: "خانه", basePath: "/" },
+  { href: "/tools", label: "دسته‌بندی ابزارها", basePath: "/tools" },
+  { href: "/tools?filter=special", label: "تب ویژه ⭐", basePath: "/tools", filter: "special" },
+  { href: "/tools?filter=popular", label: "ابزارهای محبوب", basePath: "/tools", filter: "popular" },
+  { href: "/about", label: "درباره ما", basePath: "/about" },
 ];
 
-export function NavLinks() {
+function NavLinksInner() {
   const pathname = usePathname();
+  const params = useSearchParams();
+  const filter = params.get("filter") ?? "";
 
   return (
-    <nav aria-label="ناوبری اصلی" className="hidden items-center gap-1 md:flex">
+    <nav aria-label="ناوبری اصلی" className="hidden items-center gap-1 lg:flex">
       {LINKS.map((link) => {
         const active =
-          link.match ? pathname === link.match : pathname === link.href;
+          pathname === link.basePath && (link.filter ? filter === link.filter : !filter);
         return (
           <Link
             key={link.href}
@@ -34,5 +47,13 @@ export function NavLinks() {
         );
       })}
     </nav>
+  );
+}
+
+export function NavLinks() {
+  return (
+    <Suspense fallback={<div className="hidden lg:block" aria-hidden="true" />}>
+      <NavLinksInner />
+    </Suspense>
   );
 }
