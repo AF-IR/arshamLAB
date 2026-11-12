@@ -10,20 +10,29 @@ import {
   Cake,
   CalendarClock,
   CalendarRange,
+  CalendarSync,
   Calculator,
+  ClipboardCheck,
   Code2,
   Eraser,
   FileOutput,
+  FileDown,
   Globe,
   Image,
   KeyRound,
   LetterText,
   ListX,
   Percent,
+  Presentation,
   QrCode,
+  ScanLine,
+  Ruler,
+  Sparkles,
   Type,
   type LucideIcon,
 } from "lucide-react";
+
+import type { CategoryColor } from "@/lib/category-color";
 
 export type ToolCategoryId =
   | "text"
@@ -32,14 +41,19 @@ export type ToolCategoryId =
   | "datetime"
   | "coding"
   | "file"
-  | "internet";
+  | "internet"
+  | "convert"
+  | "ai";
 
 export interface ToolCategory {
   id: ToolCategoryId;
   title: string;
   description: string;
   icon: LucideIcon;
+  color: CategoryColor;
 }
+
+export type ToolBadge = "new" | "ai";
 
 export interface Tool {
   slug: string;
@@ -55,8 +69,20 @@ export interface Tool {
   popular?: boolean;
   /** در بخش ابزارهای منتخب صفحه اصلی نمایش داده شود */
   featured?: boolean;
+  /** برچسب نمایشی روی کارت (جدید / هوش مصنوعی) */
+  badge?: ToolBadge;
+  /**
+   * آدرس ابزار خارجی (مثل آرشام پوینت). اگر تنظیم شود، ابزار روی سایت
+   * دیگری اجرا می‌شود و صفحه داخلی فقط معرفی و لینک است.
+   */
+  externalUrl?: string;
   /** آیا پردازش کاملاً در مرورگر انجام می‌شود (هیچ داده‌ای به سرور نمی‌رود) */
   localProcessing: boolean;
+  /**
+   * ابزار ویژه: ستاره‌دار و شاخص (مثل آرشام پوینت و آرشام فرم) که در «تب ویژه»
+   * صفحه /tools و بخش ویژه صفحه اصلی نمایش داده می‌شود.
+   */
+  special?: boolean;
 }
 
 export const TOOL_CATEGORIES: ToolCategory[] = [
@@ -65,42 +91,63 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
     title: "ابزارهای متنی",
     description: "شمارش، پاک‌سازی و تبدیل متن و ارقام",
     icon: Type,
+    color: "blue",
   },
   {
-    id: "image",
-    title: "ابزارهای تصاویر",
-    description: "پردازش و تبدیل تصویر",
-    icon: Image,
+    id: "convert",
+    title: "مبدل‌ها",
+    description: "تبدیل واحدها، اعداد و مقیاس‌ها",
+    icon: Ruler,
+    color: "green",
   },
   {
     id: "calculation",
     title: "ابزارهای محاسباتی",
     description: "محاسبه درصد، تخفیف و اعداد",
     icon: Calculator,
+    color: "amber",
   },
   {
     id: "datetime",
     title: "ابزارهای تاریخ و زمان",
-    description: "اختلاف تاریخ، سن و تقویم شمسی",
+    description: "تبدیل تاریخ شمسی و میلادی، سن و اختلاف تاریخ",
     icon: CalendarClock,
+    color: "teal",
   },
   {
     id: "coding",
     title: "ابزارهای کدنویسی",
     description: "قالب‌بندی و اعتبارسنجی JSON",
     icon: Code2,
+    color: "purple",
+  },
+  {
+    id: "image",
+    title: "ابزارهای تصاویر",
+    description: "فشرده‌سازی و پردازش تصویر در مرورگر",
+    icon: Image,
+    color: "orange",
+  },
+  {
+    id: "internet",
+    title: "ابزارهای اینترنتی",
+    description: "ساخت و خواندن QR Code و ابزارهای وب",
+    icon: Globe,
+    color: "cyan",
+  },
+  {
+    id: "ai",
+    title: "ابزارهای هوش مصنوعی",
+    description: "ابزارهای هوشمند آرشام، مثل آرشام پوینت و آرشام فرم",
+    icon: Sparkles,
+    color: "pink",
   },
   {
     id: "file",
     title: "ابزارهای فایل و تبدیل فرمت",
     description: "تبدیل فرمت فایل‌ها",
     icon: FileOutput,
-  },
-  {
-    id: "internet",
-    title: "ابزارهای اینترنتی",
-    description: "QR Code و ابزارهای وب",
-    icon: Globe,
+    color: "slate",
   },
 ];
 
@@ -127,7 +174,6 @@ export const TOOLS: Tool[] = [
     category: "text",
     icon: Eraser,
     keywords: ["حذف فاصله اضافی", "پاکسازی متن", "حذف تب", "remove extra spaces"],
-    featured: false,
     localProcessing: true,
   },
   {
@@ -179,6 +225,40 @@ export const TOOLS: Tool[] = [
     localProcessing: true,
   },
   {
+    slug: "qr-code-reader",
+    title: "خواندن QR Code",
+    excerpt: "خواندن کد QR از آپلود عکس یا دوربین گوشی؛ بدون ارسال تصویر به سرور",
+    description:
+      "خواندن محتوای QR Code آنلاین با آپلود تصویر یا دوربین گوشی؛ نمایش متن یا لینک داخل کد با امکان کپی و باز کردن، کاملاً داخل مرورگر.",
+    category: "internet",
+    icon: ScanLine,
+    keywords: ["خواندن QR", "QR Code scanner", "کیوآر خوان", "اسکن QR", "barcode reader"],
+    popular: true,
+    featured: true,
+    badge: "new",
+    localProcessing: true,
+  },
+  {
+    slug: "date-converter",
+    title: "تبدیل تاریخ شمسی و میلادی",
+    excerpt: "تبدیل دقیق دوطرفه تاریخ شمسی ↔ میلادی با روز هفته و سال کبیسه",
+    description:
+      "تبدیل آنلاین تاریخ شمسی به میلادی و میلادی به شمسی با الگوریتم دقیق؛ نمایش روز هفته، روز سال و معادل هر دو تقویم به‌صورت هم‌زمان.",
+    category: "datetime",
+    icon: CalendarSync,
+    keywords: [
+      "تبدیل تاریخ شمسی به میلادی",
+      "تبدیل تاریخ میلادی به شمسی",
+      "تاریخ امروز",
+      "تقویم شمسی",
+      "date converter",
+    ],
+    popular: true,
+    featured: true,
+    badge: "new",
+    localProcessing: true,
+  },
+  {
     slug: "date-difference",
     title: "محاسبه اختلاف دو تاریخ",
     excerpt: "فاصله روز بین دو تاریخ میلادی با نمایش معادل شمسی",
@@ -203,6 +283,26 @@ export const TOOLS: Tool[] = [
     localProcessing: true,
   },
   {
+    slug: "unit-converter",
+    title: "تبدیل واحدها",
+    excerpt: "تبدیل طول، وزن، دما، مساحت، حجم، سرعت، داده و زمان",
+    description:
+      "مبدل آنلاین واحدها با پشتیبانی از طول، وزن، دما، مساحت، حجم، سرعت، حجم داده و زمان؛ تبدیل فوری با نمایش جدول واحدهای دیگر.",
+    category: "convert",
+    icon: Ruler,
+    keywords: [
+      "تبدیل واحد",
+      "مبدل واحدها",
+      "تبدیل اینچ به سانتی‌متر",
+      "تبدیل کیلو به پوند",
+      "unit converter",
+    ],
+    popular: true,
+    featured: true,
+    badge: "new",
+    localProcessing: true,
+  },
+  {
     slug: "json-formatter",
     title: "فرمت‌کننده JSON",
     excerpt: "زیباسازی، فشرده‌سازی و اعتبارسنجی JSON با پیام خطای فارسی",
@@ -212,6 +312,25 @@ export const TOOLS: Tool[] = [
     icon: Braces,
     keywords: ["JSON", "فرمت JSON", "beautify json", "minify json", "اعتبارسنجی JSON"],
     featured: true,
+    localProcessing: true,
+  },
+  {
+    slug: "image-compressor",
+    title: "کم کردن حجم عکس",
+    excerpt: "فشرده‌سازی عکس با تنظیم کیفیت و ابعاد؛ خروجی JPG یا WebP",
+    description:
+      "کاهش حجم عکس آنلاین در مرورگر با تنظیم کیفیت، ابعاد و فرمت خروجی (JPG/WebP)؛ نمایش مقایسه حجم قبل و بعد و دانلود فوری، بدون آپلود به سرور.",
+    category: "image",
+    icon: FileDown,
+    keywords: [
+      "کم کردن حجم عکس",
+      "فشرده سازی عکس",
+      "کاهش حجم تصویر",
+      "image compressor",
+      "کم کردن حجم عکس آنلاین",
+    ],
+    featured: true,
+    badge: "new",
     localProcessing: true,
   },
   {
@@ -227,7 +346,69 @@ export const TOOLS: Tool[] = [
     featured: true,
     localProcessing: true,
   },
+  {
+    slug: "text-summarizer",
+    title: "خلاصه‌ساز متن",
+    excerpt: "استخراج مهم‌ترین جمله‌های متن با الگوریتم محلی؛ بدون ارسال به سرور",
+    description:
+      "خلاصه‌سازی آنلاین متن فارسی به روش استخراجی با تحلیل بسامد واژه‌ها؛ تنظیم طول خلاصه، نمایش درصد فشرده‌سازی و کپی سریع، کاملاً در مرورگر.",
+    category: "ai",
+    icon: Sparkles,
+    keywords: ["خلاصه ساز متن", "خلاصه کردن متن", "text summarizer", "خلاصه‌سازی هوشمند"],
+    badge: "new",
+    localProcessing: true,
+  },
+  {
+    slug: "arsham-point",
+    title: "آرشام پوینت",
+    excerpt: "ساخت ارائه (پاورپوینت) با هوش مصنوعی؛ خروجی HTML فارسی و راست‌چین",
+    description:
+      "آرشام پوینت؛ ابزار هوش مصنوعی ساخت ارائه فارسی. موضوع را بنویسید تا اسلایدهای کامل با طراحی آماده بسازد؛ خروجی HTML قابل اجرا و دانلود.",
+    category: "ai",
+    icon: Presentation,
+    keywords: [
+      "آرشام پوینت",
+      "ساخت پاورپوینت با هوش مصنوعی",
+      "ساخت ارائه با AI",
+      "arsham point",
+      "پاورپوینت هوش مصنوعی",
+    ],
+    featured: true,
+    badge: "ai",
+    externalUrl: "https://arshampoint.vercel.app",
+    localProcessing: false,
+    special: true,
+  },
+  {
+    slug: "arsham-form",
+    title: "آرشام فرم",
+    excerpt: "ساخت فرم و آزمون آنلاین با تحلیل پاسخنامه توسط هوش مصنوعی",
+    description:
+      "آرشام فرم؛ ابزار هوش مصنوعی ساخت فرم و آزمون آنلاین با تحلیل پاسخنامه. سوال‌ها را بسازید، پاسخ‌ها را جمع کنید و نتایج را با هوش مصنوعی بررسی کنید.",
+    category: "ai",
+    icon: ClipboardCheck,
+    keywords: [
+      "آرشام فرم",
+      "ساخت فرم",
+      "فرم ساز آنلاین",
+      "تحلیل پاسخنامه",
+      "آزمون آنلاین",
+      "arsham form",
+      "فرم آزمون هوش مصنوعی",
+    ],
+    popular: true,
+    featured: true,
+    badge: "ai",
+    externalUrl: "https://afform.vercel.app",
+    localProcessing: false,
+    special: true,
+  },
 ];
+
+/** آیا ابزار روی دامنه دیگری اجرا می‌شود؟ */
+export function isExternalTool(tool: Tool): boolean {
+  return Boolean(tool.externalUrl);
+}
 
 export function getToolBySlug(slug: string): Tool | undefined {
   return TOOLS.find((t) => t.slug === slug);
@@ -250,6 +431,15 @@ export function getFeaturedTools(): Tool[] {
 export function getPopularTools(): Tool[] {
   const popular = TOOLS.filter((t) => t.popular);
   return popular.length > 0 ? popular : TOOLS.slice(0, 4);
+}
+
+export function getNewTools(): Tool[] {
+  return TOOLS.filter((t) => t.badge === "new");
+}
+
+/** ابزارهای ویژه (ستاره‌دار) — هسته «تب ویژه» به‌همراه ابزارهای اضافه‌شده از پنل مدیریت */
+export function getSpecialTools(): Tool[] {
+  return TOOLS.filter((t) => t.special);
 }
 
 export function getToolCategory(tool: Tool): ToolCategory {
