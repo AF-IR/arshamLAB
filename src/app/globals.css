@@ -1,0 +1,315 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-vazirmatn), Tahoma, "Segoe UI", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/*
+ * هویت بصری Arsham Lab:
+ * پس‌زمینه روشن خنثی، رنگ تأکیدی سبزآبی (Teal) با استفاده محدود،
+ * کارت‌های ساده و گوشه‌های نرم.
+ */
+:root {
+  --radius: 0.75rem;
+  --background: oklch(0.987 0.002 95);
+  --foreground: oklch(0.245 0.012 250);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.245 0.012 250);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.245 0.012 250);
+  --primary: oklch(0.6 0.106 184.704);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.965 0.004 95);
+  --secondary-foreground: oklch(0.33 0.015 250);
+  --muted: oklch(0.963 0.004 95);
+  --muted-foreground: oklch(0.47 0.015 250);
+  --accent: oklch(0.962 0.022 180);
+  --accent-foreground: oklch(0.38 0.05 190);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.915 0.006 95);
+  --input: oklch(0.9 0.006 95);
+  --ring: oklch(0.6 0.106 184.704);
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.245 0.012 250);
+  --sidebar-primary: oklch(0.6 0.106 184.704);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.962 0.022 180);
+  --sidebar-accent-foreground: oklch(0.38 0.05 190);
+  --sidebar-border: oklch(0.915 0.006 95);
+  --sidebar-ring: oklch(0.6 0.106 184.704);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.704 0.14 182.503);
+  --primary-foreground: oklch(0.145 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.704 0.14 182.503);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    @apply bg-primary/20;
+  }
+}
+
+/* اسکرول‌بار ظریف برای خروجی‌های بلند ابزارها */
+@layer utilities {
+  .thin-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: oklch(0.8 0.01 95) transparent;
+  }
+  .thin-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .thin-scrollbar::-webkit-scrollbar-thumb {
+    background: oklch(0.82 0.01 95);
+    border-radius: 8px;
+  }
+  .thin-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+/* ------------------------- هویت بصری سبک Google Labs ------------------------ */
+
+/* تیتر گرادیانی متحرک — چهار رنگ برند گوگل روی متن */
+@utility gradient-hero-text {
+  background-image: linear-gradient(
+    110deg,
+    oklch(0.55 0.2 260),
+    oklch(0.62 0.24 20),
+    oklch(0.68 0.17 85),
+    oklch(0.6 0.17 150),
+    oklch(0.55 0.2 260)
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-pan 9s ease-in-out infinite;
+}
+
+/* لکه‌های رنگی شناور پس‌زمینه Hero */
+@utility hero-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(48px);
+  opacity: 0.32;
+  pointer-events: none;
+  animation: blob-float 12s ease-in-out infinite;
+}
+
+@keyframes gradient-pan {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes blob-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(14px, -18px, 0) scale(1.06);
+  }
+  66% {
+    transform: translate3d(-12px, 10px, 0) scale(0.96);
+  }
+}
+
+/* حرکت شناور ملایم برای المان‌های تزئینی */
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.float-soft {
+  animation: float-soft 5s ease-in-out infinite;
+}
+
+/* ------------------- افکت‌های لود — ورود نرم محتوا هنگام بارگذاری ------------------- */
+
+/* ورود از پایین با محو شدن؛ با «backwards» در دوره تأخیر مخفی می‌ماند و پس از پایان،
+   کنترل را به استایل‌های عادی (مثل هاور) برمی‌گرداند */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@utility reveal {
+  animation: reveal-up 0.65s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+/* تأخیرهای مرحله‌ای برای ورود آبشاری کارت‌ها */
+@utility reveal-d1 { animation-delay: 0.07s; }
+@utility reveal-d2 { animation-delay: 0.14s; }
+@utility reveal-d3 { animation-delay: 0.21s; }
+@utility reveal-d4 { animation-delay: 0.28s; }
+@utility reveal-d5 { animation-delay: 0.35s; }
+@utility reveal-d6 { animation-delay: 0.42s; }
+@utility reveal-d7 { animation-delay: 0.49s; }
+@utility reveal-d8 { animation-delay: 0.56s; }
+
+/* ورود از سمت راست (RTL) برای کارت‌های ویژه */
+@keyframes reveal-side {
+  from {
+    opacity: 0;
+    transform: translateX(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@utility reveal-side {
+  animation: reveal-side 0.75s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+/* نبض یک‌باره هاله دور کارت ویژه هنگام لود */
+@keyframes special-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(217, 70, 239, 0.35);
+  }
+  100% {
+    box-shadow: 0 0 0 22px rgba(217, 70, 239, 0);
+  }
+}
+
+@utility special-glow {
+  animation: special-glow 1.4s ease-out 0.4s backwards;
+}
+
+/* احترام به کاهش انیمیشن برای کاربران حساس */
+@media (prefers-reduced-motion: reduce) {
+  .gradient-hero-text,
+  .hero-blob,
+  .float-soft {
+    animation: none;
+  }
+  .reveal,
+  .reveal-side,
+  .special-glow {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ------------------------- تایپوگرافی محتوای راهنما ------------------------- */
+
+.guide-content h2 {
+  @apply text-lg font-extrabold sm:text-xl;
+}
+.guide-content h2::before {
+  content: "";
+  @apply mr-0 mb-2.5 block h-1 w-10 rounded-full bg-gradient-to-l from-teal-500 via-fuchsia-500 to-blue-500;
+}
+.guide-content h3 {
+  @apply text-base font-bold;
+}
+.guide-content p {
+  @apply text-[15px] leading-8 text-muted-foreground sm:text-base sm:leading-8;
+}
+.guide-content ul,
+.guide-content ol {
+  @apply space-y-1.5 pe-1 text-[15px] leading-8 text-muted-foreground sm:text-base;
+}
+.guide-content ul > li {
+  @apply relative ps-5 before:absolute before:right-0 before:top-3.5 before:size-1.5 before:rounded-full before:bg-primary/70;
+}
+.guide-content ol {
+  @apply list-decimal space-y-1.5 pe-5;
+}
+.guide-content a {
+  @apply font-semibold text-primary underline underline-offset-4 hover:text-primary/80;
+}
+.guide-content code {
+  @apply rounded-md border bg-muted px-1.5 py-0.5 font-mono text-[13px] text-foreground;
+}
+.guide-content strong {
+  @apply font-bold text-foreground;
+}
+.guide-content table {
+  @apply w-full border-collapse text-sm;
+}
+.guide-content th,
+.guide-content td {
+  @apply border p-2 text-start;
+}
+
